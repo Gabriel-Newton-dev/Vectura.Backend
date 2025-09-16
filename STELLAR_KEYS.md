@@ -4,8 +4,8 @@
 
 O arquivo `environment.env` foi criado com suas chaves Stellar da testnet:
 
-- **Chave Pública:** `GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2`
-- **Chave Secreta:** `SDY25443K6WYGFMCMW2R6KPCAMMNCWSGHHNVUACRR5AO7IBRL7O3XZGF`
+- **Chave Pública:** `< sua chave publica>`
+- **Chave Secreta:** `< sua chave privada>`
 
 ## 🚀 **Como Usar:**
 
@@ -35,16 +35,16 @@ python main.py
 Se as contas não estiverem ativas na testnet:
 
 1. **Acesse o Friendbot:** https://friendbot.stellar.org/
-2. **Digite sua chave pública:** `GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2`
+2. **Digite sua chave pública:** `< sua chave publica>`
 3. **Clique em "Fund Account"** para receber XLM de teste
 
 ### **Verificar Saldo:**
 ```bash
 # Via API
-curl http://localhost:8000/api/stellar/saldo/GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2
+curl http://localhost:8000/api/stellar/saldo/< sua chave publica>
 
 # Via Stellar Laboratory
-https://laboratory.stellar.org/#account?account=GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2
+https://laboratory.stellar.org/#account?account=< sua chave publica>
 ```
 
 ## 🔄 **Modos de Operação:**

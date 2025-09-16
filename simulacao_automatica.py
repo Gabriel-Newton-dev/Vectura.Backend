@@ -136,7 +136,7 @@ def main():
     print_separator("SIMULAÇÃO CONCLUÍDA")
     print("✅ Transações reais criadas na testnet!")
     print("🔍 Verifique as transações nos exploradores:")
-    print("   - Stellar Expert: https://stellar.expert/explorer/testnet/account/GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2")
+    print("   - Stellar Expert: https://stellar.expert/explorer/testnet/account/< sua chave publica>")
     print("   - Stellar Laboratory: https://laboratory.stellar.org/")
     print("   - Testnet Explorer: https://testnet.steexp.com/")
 
