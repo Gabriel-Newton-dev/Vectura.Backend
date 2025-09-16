@@ -10,6 +10,23 @@ Sistema de back-end para financiamento veicular com integração à rede Stellar
 - **Documentação automática** (Swagger UI e ReDoc)
 - **Smart contracts** simulados para financiamentos
 
+
+## 🔗 Links do Projeto
+
+## Backend
+
+- **Contrato Inteligente Soroban:** [soroban-smart-contract](https://github.com/Gabriel-Newton-dev/soroban-smart-contract)
+
+- **Repositório:** [Vectura.Backend](https://github.com/Gabriel-Newton-dev/Vectura.Backend)
+
+API em produção: http://vecturabackend-production.up.railway.app/docs
+
+## Frontend
+
+- **Repositório:** [Vectura.Frontend](https://github.com/mateusgreg/Vectura.Frontend)
+
+Aplicação em produção: http://vectura-frontend.vercel.app
+
 ## 📋 Requisitos
 
 - Python 3.8+
