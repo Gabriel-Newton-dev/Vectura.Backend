@@ -13,7 +13,6 @@ router = APIRouter(prefix="/api/financiamento", tags=["financiamentos"])
 # idealmente usando variáveis de ambiente ou um sistema de gerenciamento de segredos.
 # Não os armazene diretamente no código em produção.
 
-# Substitua o valor abaixo pelo seu Contract ID
 CONTRACT_ID = "CDOSEAFT6X2CE6VNW4UIEQQJHKQAT3FUYVZZUMG3UPF3Z6X7DANPNJCM" 
 
 # Substitua pelo seu Secret Key
