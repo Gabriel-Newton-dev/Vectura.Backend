@@ -132,7 +132,7 @@ def verificar_conta_stellar():
     """Verifica saldo da conta na testnet"""
     print_separator("VERIFICANDO CONTA STELLAR")
     
-    conta = "< sua chave publica>"
+    conta = "GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2"
     
     response = requests.get(f"{BASE_URL}/api/stellar/saldo/{conta}")
     result = print_response(response, "Saldo da Conta na Testnet")
@@ -179,7 +179,7 @@ def main():
     print("🔍 Verifique as transações nos exploradores:")
     print("   - Stellar Expert: https://testnet.steexp.com/")
     print("   - Stellar Laboratory: https://laboratory.stellar.org/")
-    print(f"   - Sua conta: https://testnet.steexp.com/account/< sua chave publica>")
+    print(f"   - Sua conta: https://testnet.steexp.com/account/GA4L46RTP3LOHAM3HNLC5VIATFXAJW65CCB3GGCP7LZ37PQF2X2PHUG2")
 
 if __name__ == "__main__":
     main()
