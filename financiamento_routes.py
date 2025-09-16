@@ -4,8 +4,55 @@ from database import get_db, Financiamento
 from models import FinanciamentoCreate, FinanciamentoUpdate, FinanciamentoResponse
 from datetime import datetime
 from typing import List
+import subprocess
+import json
+import os
 
 router = APIRouter(prefix="/api/financiamento", tags=["financiamentos"])
+
+# ⚠️ O 'CONTRACT_ID' e a 'SECRET_KEY' devem ser armazenados de forma segura,
+# idealmente usando variáveis de ambiente ou um sistema de gerenciamento de segredos.
+# Não os armazene diretamente no código em produção.
+
+# Substitua o valor abaixo pelo seu Contract ID
+CONTRACT_ID = "CDOSEAFT6X2CE6VNW4UIEQQJHKQAT3FUYVZZUMG3UPF3Z6X7DANPNJCM" 
+
+# Substitua pelo seu Secret Key
+SECRET_KEY = os.environ.get("STELLAR_SECRET_KEY", "<SUA_CHAVE_SECRETA_AQUI>")
+
+def chamar_smart_contract_aprovar(financiamento_id: int):
+    """
+    Chama a função 'aprovar_financiamento' no smart contract Soroban.
+    
+    Esta função invoca o soroban-cli para interagir com a blockchain,
+    passando o ID do financiamento como um argumento.
+    """
+    # ⚠️ Certifique-se de que o soroban-cli esteja instalado e acessível no seu sistema.
+    
+    comando = [
+        "soroban", "contract", "invoke",
+        "--id", CONTRACT_ID,
+        "--secret-key", SECRET_KEY,
+        "--network", "testnet",
+        "--", "aprovar_financiamento",
+        "--financiamento_id", str(financiamento_id)
+    ]
+
+    try:
+        resultado = subprocess.run(
+            comando, 
+            capture_output=True, 
+            text=True, 
+            check=True
+        )
+        print("Saída da CLI do Soroban:", resultado.stdout)
+        return resultado.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Erro ao invocar o contrato: {e.stderr}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Falha na transação da blockchain: {e.stderr}"
+        )
 
 @router.post("/", response_model=FinanciamentoResponse, status_code=status.HTTP_201_CREATED)
 async def criar_financiamento(financiamento: FinanciamentoCreate, db: Session = Depends(get_db)):
@@ -58,30 +105,46 @@ async def obter_financiamento(financiamento_id: int, db: Session = Depends(get_d
 @router.put("/{financiamento_id}", response_model=FinanciamentoResponse)
 async def atualizar_financiamento(
     financiamento_id: int, 
-    financiamento_update: FinanciamentoUpdate, 
+    financiamento_update: FinanciamentoUpdate,
     db: Session = Depends(get_db)
 ):
     """
-    Atualiza o status de um financiamento
+    Atualiza o status de um financiamento e interage com o smart contract
     """
     financiamento = db.query(Financiamento).filter(Financiamento.id == financiamento_id).first()
-    
+
     if not financiamento:
         raise HTTPException(
             status_code=404,
             detail=f"Financiamento com ID {financiamento_id} não encontrado"
         )
     
-    # Atualizar status
-    financiamento.status_financiamento = financiamento_update.status_financiamento
-    
-    # Se aprovado, registrar data de aprovação
-    if financiamento_update.status_financiamento == "aprovado":
-        financiamento.aprovado_em = datetime.utcnow()
-    
-    db.commit()
-    db.refresh(financiamento)
-    
+    # 1. Se o status for "aprovado", a API agora interage com a blockchain
+    if financiamento_update.status_financiamento == "aprovado" and financiamento.status_financiamento != "aprovado":
+        try:
+            # Chama a função no smart contract, passando o ID do financiamento
+            chamar_smart_contract_aprovar(financiamento_id)
+
+            # Se a chamada foi bem-sucedida, atualiza o banco de dados
+            financiamento.status_financiamento = "aprovado"
+            financiamento.aprovado_em = datetime.utcnow()
+            db.commit()
+            db.refresh(financiamento)
+
+        except HTTPException as e:
+            # Se a transação falhar, a exceção já foi levantada dentro da função de chamada do contrato
+            raise e
+        except Exception as e:
+            # Captura outros erros inesperados
+            db.rollback()
+            raise HTTPException(status_code=500, detail=f"Erro inesperado: {str(e)}")
+
+    # 2. Se o status não for "aprovado", a API apenas atualiza o banco de dados localmente
+    else:
+        financiamento.status_financiamento = financiamento_update.status_financiamento
+        db.commit()
+        db.refresh(financiamento)
+
     return financiamento
 
 @router.get("/status/{status}", response_model=List[FinanciamentoResponse])
