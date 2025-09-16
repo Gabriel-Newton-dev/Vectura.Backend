@@ -13,10 +13,10 @@ router = APIRouter(prefix="/api/financiamento", tags=["financiamentos"])
 # idealmente usando variáveis de ambiente ou um sistema de gerenciamento de segredos.
 # Não os armazene diretamente no código em produção.
 
-CONTRACT_ID = "CDOSEAFT6X2CE6VNW4UIEQQJHKQAT3FUYVZZUMG3UPF3Z6X7DANPNJCM" 
+CONTRACT_ID = "CDOSEAFT6X2CE6VNW4UIEQQJHKQAT3FUYVZZUMG3UPF3Z6X7DANPNJCM"
 
 # Substitua pelo seu Secret Key
-SECRET_KEY = os.environ.get("STELLAR_SECRET_KEY", "<SUA_CHAVE_SECRETA_AQUI>")
+SECRET_KEY = os.environ.get("STELLAR_SECRET_KEY")
 
 def chamar_smart_contract_aprovar(financiamento_id: int):
     """
