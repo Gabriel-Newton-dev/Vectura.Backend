@@ -9,7 +9,6 @@ import json
 import os
 
 router = APIRouter(prefix="/api/financiamento", tags=["financiamentos"])
-
 # ⚠️ O 'CONTRACT_ID' e a 'SECRET_KEY' devem ser armazenados de forma segura,
 # idealmente usando variáveis de ambiente ou um sistema de gerenciamento de segredos.
 # Não os armazene diretamente no código em produção.
